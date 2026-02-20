@@ -1,4 +1,5 @@
 steps:
+  # Step 1: Build the Docker image with API_KEY baked in
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -12,9 +13,29 @@ steps:
       - 'GOOGLE_CLOUD_LOCATION=$_REGION'
       - '.'
 
+  # Step 2: Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/dr-singh-ai']
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE_NAME'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/dr-singh-ai'
+      - '--region'
+      - '$_REGION'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+
 images:
   - 'gcr.io/$PROJECT_ID/dr-singh-ai'
 
 substitutions:
   _API_KEY: ''
   _REGION: 'europe-west1'
+  _SERVICE_NAME: 'eye-app'
