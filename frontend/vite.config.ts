@@ -5,7 +5,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
     return {
       define: {
-        'process.env.API_KEY' : JSON.stringify('api-key-this-is-not-used-can-be-ignored!'),
+        'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
         'process.env.GOOGLE_CLOUD_PROJECT': JSON.stringify(env.GOOGLE_CLOUD_PROJECT || ''),
         'process.env.GOOGLE_CLOUD_LOCATION': JSON.stringify(env.GOOGLE_CLOUD_LOCATION || 'us-central1'),
       },
