@@ -6,6 +6,10 @@ steps:
       - 'gcr.io/$PROJECT_ID/dr-singh-ai'
       - '--build-arg'
       - 'API_KEY=$_API_KEY'
+      - '--build-arg'
+      - 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+      - '--build-arg'
+      - 'GOOGLE_CLOUD_LOCATION=$_REGION'
       - '.'
 
 images:
@@ -13,3 +17,4 @@ images:
 
 substitutions:
   _API_KEY: ''
+  _REGION: 'europe-west1'

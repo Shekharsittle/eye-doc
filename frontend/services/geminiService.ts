@@ -2,22 +2,10 @@
 import { GoogleGenAI, Chat } from '@google/genai';
 import { Role, Message } from '../types';
 
-// Handle API key safely for both build and runtime environments
-const getApiKey = () => {
-  // @ts-ignore
-  if (typeof process !== 'undefined' && process.env?.API_KEY) {
-    // @ts-ignore
-    return process.env.API_KEY;
-  }
-  // @ts-ignore
-  if (import.meta.env?.VITE_API_KEY) {
-    // @ts-ignore
-    return import.meta.env.VITE_API_KEY;
-  }
-  return '';
-};
-
-const API_KEY = getApiKey();
+// @ts-ignore
+const GOOGLE_CLOUD_PROJECT: string = process.env.GOOGLE_CLOUD_PROJECT || '';
+// @ts-ignore
+const GOOGLE_CLOUD_LOCATION: string = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
 
 const SYSTEM_INSTRUCTION = `
 You are "Dr. Mrityunjay Singh AI", a distinguished Ophthalmologist and AI medical assistant. 
@@ -43,10 +31,7 @@ export class GeminiService {
   private chat: Chat | null = null;
 
   constructor() {
-    if (!API_KEY) {
-      console.warn("Gemini API Key is missing. Chat functionality will not work.");
-    }
-    this.ai = new GoogleGenAI({ apiKey: API_KEY, vertexai: true });
+    this.ai = new GoogleGenAI({ vertexai: true, project: GOOGLE_CLOUD_PROJECT, location: GOOGLE_CLOUD_LOCATION });
   }
 
   private initChat(history: Message[] = []) {
