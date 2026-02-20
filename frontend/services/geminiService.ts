@@ -31,7 +31,9 @@ export class GeminiService {
   private chat: Chat | null = null;
 
   constructor() {
-    this.ai = new GoogleGenAI({ vertexai: true, project: GOOGLE_CLOUD_PROJECT, location: GOOGLE_CLOUD_LOCATION });
+    // apiKey is required by the SDK's browser check but is never used in requests —
+    // the vertex-ai-proxy-interceptor redirects all API calls to the Node backend.
+    this.ai = new GoogleGenAI({ vertexai: true, project: GOOGLE_CLOUD_PROJECT, location: GOOGLE_CLOUD_LOCATION, apiKey: 'not-used-intercepted-by-proxy' });
   }
 
   private initChat(history: Message[] = []) {
