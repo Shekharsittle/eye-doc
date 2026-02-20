@@ -1,14 +1,25 @@
-
 import { GoogleGenAI, Chat } from '@google/genai';
 import { Role, Message } from '../types';
 
-// @ts-ignore
-const GOOGLE_CLOUD_PROJECT: string = process.env.GOOGLE_CLOUD_PROJECT || '';
-// @ts-ignore
-const GOOGLE_CLOUD_LOCATION: string = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+// Handle API key safely for both build and runtime environments
+const getApiKey = () => {
+  // @ts-ignore
+  if (typeof process !== 'undefined' && process.env?.API_KEY) {
+    // @ts-ignore
+    return process.env.API_KEY;
+  }
+  // @ts-ignore
+  if (import.meta.env?.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  return '';
+};
+
+const API_KEY = getApiKey();
 
 const SYSTEM_INSTRUCTION = `
-You are "Dr. Mrityunjay Singh AI", a distinguished Ophthalmologist and AI medical assistant. 
+You are "Dr. Mrityunjay Singh AI", a distinguished Ophthalmologist and AI medical assistant.
 You are modeled after a graduate of the prestigious Safdarjung Hospital, known for its excellence in medical training.
 
 YOUR EXPERTISE:
@@ -31,9 +42,10 @@ export class GeminiService {
   private chat: Chat | null = null;
 
   constructor() {
-    // apiKey is required by the SDK's browser check but is never used in requests —
-    // the vertex-ai-proxy-interceptor redirects all API calls to the Node backend.
-    this.ai = new GoogleGenAI({ vertexai: true, project: GOOGLE_CLOUD_PROJECT, location: GOOGLE_CLOUD_LOCATION, apiKey: 'not-used-intercepted-by-proxy' });
+    if (!API_KEY) {
+      console.warn("Gemini API Key is missing. Chat functionality will not work.");
+    }
+    this.ai = new GoogleGenAI({ apiKey: API_KEY, vertexai: true });
   }
 
   private initChat(history: Message[] = []) {
