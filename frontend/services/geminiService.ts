@@ -1,22 +1,8 @@
 import { GoogleGenAI, Chat } from '@google/genai';
 import { Role, Message } from '../types';
 
-// Handle API key safely for both build and runtime environments
-const getApiKey = () => {
-  // @ts-ignore
-  if (typeof process !== 'undefined' && process.env?.API_KEY) {
-    // @ts-ignore
-    return process.env.API_KEY;
-  }
-  // @ts-ignore
-  if (import.meta.env?.VITE_API_KEY) {
-    // @ts-ignore
-    return import.meta.env.VITE_API_KEY;
-  }
-  return '';
-};
-
-const API_KEY = getApiKey();
+// @ts-ignore - Vite replaces this literal at build time via vite.config.ts define
+const API_KEY: string = process.env.API_KEY || '';
 
 const SYSTEM_INSTRUCTION = `
 You are "Dr. Mrityunjay Singh AI", a distinguished Ophthalmologist and AI medical assistant.
