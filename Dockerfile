@@ -16,6 +16,9 @@ ENV API_KEY=$API_KEY
 ENV GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT
 ENV GOOGLE_CLOUD_LOCATION=$GOOGLE_CLOUD_LOCATION
 
+# Debug: check if API_KEY was received (visible in build logs)
+RUN echo "API_KEY received: $(test -n "$API_KEY" && echo YES || echo NO)"
+
 RUN npm run build
 
 # Stage 2: Final image with nginx + Node backend
