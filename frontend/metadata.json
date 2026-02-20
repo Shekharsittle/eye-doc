@@ -1,0 +1,8 @@
+
+{
+  "name": "Dr. Mrityunjay Singh AI",
+  "description": "A specialized Ophthalmology AI assistant named Dr. Mrityunjay Singh AI. Modeled after a Safdarjung Hospital graduate, it provides expert information on eye care, vision health, and ocular conditions.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
