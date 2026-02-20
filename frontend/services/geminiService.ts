@@ -45,7 +45,7 @@ export class GeminiService {
     if (!API_KEY) {
       console.warn("Gemini API Key is missing. Chat functionality will not work.");
     }
-    this.ai = new GoogleGenAI({ apiKey: API_KEY, vertexai: true });
+    this.ai = new GoogleGenAI({ apiKey: API_KEY });
   }
 
   private initChat(history: Message[] = []) {
